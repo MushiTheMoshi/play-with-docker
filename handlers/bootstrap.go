@@ -14,6 +14,7 @@ import (
 	"path"
 	"strings"
 	"time"
+	"os"
 
 	"golang.org/x/crypto/acme/autocert"
 	"golang.org/x/oauth2"
@@ -67,12 +68,20 @@ func Register(extend HandlerExtender) {
 	r := mux.NewRouter()
 	corsRouter := mux.NewRouter()
 
+  var val1,val3 string
+
+	val1, ok := os.LookupEnv("PWD_CLASSROM_ORIGIN")
+	if !ok {
+		val1 = "mypwd.com"
+ 		val3= "pwd.anjana.club:4000"
+	}
+
 	corsHandler := gh.CORS(gh.AllowCredentials(), gh.AllowedHeaders([]string{"x-requested-with", "content-type"}), gh.AllowedMethods([]string{"GET", "POST", "HEAD", "DELETE"}), gh.AllowedOriginValidator(func(origin string) bool {
 		if strings.Contains(origin, "localhost") ||
-			strings.HasSuffix(origin, "play-with-docker.com") ||
-			strings.HasSuffix(origin, "play-with-kubernetes.com") ||
-			strings.HasSuffix(origin, "docker.com") ||
-			strings.HasSuffix(origin, "play-with-go.dev") {
+			strings.HasSuffix(origin, "mypwd.com" ) ||
+			strings.HasSuffix(origin, val1 ) ||
+			strings.HasSuffix(origin, val3 ) ||
+			strings.HasSuffix(origin, "play-with-docker.com") {
 			return true
 		}
 		return false
