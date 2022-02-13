@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"strings"
+	"os"
 
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/play-with-docker/play-with-docker/config"
@@ -42,7 +43,9 @@ func (p *overlaySessionProvisioner) SessionNew(ctx context.Context, s *types.Ses
 	}
 	log.Printf("Network [%s] created for session [%s]\n", s.Id, s.Id)
 
-	ip, err := dockerClient.NetworkConnect(config.L2ContainerName, s.Id, s.PwdIpAddress)
+	// TODO CHANGE TO K8s IP: L2_SERVICE_HOST=
+	// ip, err := dockerClient.NetworkConnect(config.L2ContainerName, s.Id, s.PwdIpAddress)
+	ip := os.Getenv("L2_SERVICE_HOST")
 	if err != nil {
 		log.Println(err)
 		return err
