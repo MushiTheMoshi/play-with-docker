@@ -349,11 +349,13 @@ func (r *proxyRouter) handleConnection(c net.Conn) {
 		host := vhostConn.ClientHelloMsg.ServerName
 		log.Printf("Proxying TLS connection to %s. Discover took %s\n", host, discoverElapsed)
 		info, err := r.director(ProtocolHTTPS, host)
+    log.Printf("==============> %s", info)
 		if err != nil {
 			log.Printf("Error directing request: %v\n", err)
 			return
 		}
 		dstHost := info.Dst
+    log.Printf("==============> %s", dstHost)
 		d, err := r.dialer.Dial("tcp", dstHost.String())
 		if err != nil {
 			log.Printf("Error dialing backend %s: %v\n", dstHost.String(), err)
@@ -378,11 +380,13 @@ func (r *proxyRouter) handleConnection(c net.Conn) {
 		}
 		log.Printf("Proxying http connection to %s. Discover took %s. Http read took %s\n", host, discoverElapsed, httpReadElapsed)
 		info, err := r.director(ProtocolHTTP, host)
+    log.Printf("==============> %s", info)
 		if err != nil {
 			log.Printf("Error directing request: %v\n", err)
 			return
 		}
 		dstHost := info.Dst
+    log.Printf("==============> %s", dstHost)
 		d, err := r.dialer.Dial("tcp", dstHost.String())
 		if err != nil {
 			log.Printf("Error dialing backend %s: %v\n", dstHost.String(), err)
